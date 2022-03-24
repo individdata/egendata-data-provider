@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "watch-dev": "nodemon src/server.ts",
     "prod": "node dist/server.js",
@@ -17,10 +18,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@digitalbazaar/ed25519-signature-2018": "^2.1.0",
+    "@digitalbazaar/ed25519-verification-key-2018": "^3.1.2",
+    "@digitalbazaar/vc": "^2.1.0",
+    "@inrupt/generate-oidc-token": "^0.1.1",
+    "@rauschma/stringio": "^1.4.0",
     "compression": "^1.7.4",
     "errorhandler": "^1.5.1",
     "express": "^4.17.3",
-    "jsonld": "^5.2.0"
+    "jsonld": "^5.2.0",
+    "solid-node-client": "^2.1.10"
   },
   "devDependencies": {
     "@types/compression": "^1.7.2",
