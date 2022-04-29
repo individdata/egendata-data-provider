@@ -132,3 +132,4 @@ dist
 
 # Credentials
 *credentials.json
+.env
