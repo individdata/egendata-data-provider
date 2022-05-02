@@ -5,20 +5,18 @@ import { SolidNodeClient } from "solid-node-client";
 
 import generateClientCredentials, { setupPod, subscribeInbox } from "./util/generateClientCredentials.js";
 import { WebhookController } from "./controller/webhookController.js";
-import * as contants from "./constants/index.js";
+import { port, keyPath, podProviderBaseUrl } from "./constants/index.js";
 
 import { loadKey } from "./util/vc.js";
 
-console.log("Started app with contants:", contants);
-
-const sourceUrl = "http://localhost:3000/arbetsformedlingen/";
-const key = await loadKey("source-key.pem", { id: `${sourceUrl}key`, controller: `${sourceUrl}controller` });
+const sourceUrl = `${podProviderBaseUrl}/arbetsformedlingen/`;
+const key = await loadKey(keyPath, { id: `${sourceUrl}key`, controller: `${sourceUrl}controller` });
 const webHookController = new WebhookController(key);
 
 const app: Application = express();
 
 // Express configuration
-app.set("port", contants.port);
+app.set("port", port);
 
 // Express middleware
 app.use(express.json());

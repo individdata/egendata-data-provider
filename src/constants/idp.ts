@@ -1,3 +1,5 @@
+import { identityProviderBaseUrl } from "../constants/index.js";
+
 interface IIdpData {
   idp: string;
   idpPath: string;
@@ -8,7 +10,7 @@ interface IIdpData {
 export default function getIdpData(testCase: number): IIdpData {
   if (testCase === 0)
     return {
-      idp: "http://localhost:3000",
+      idp: identityProviderBaseUrl,
       idpPath: "/idp/",
       ident: "email",
       user: "sink@example.com",
