@@ -2,7 +2,7 @@ import { chunksToLinesAsync, chomp } from "@rauschma/stringio";
 import { spawn, exec } from "child_process";
 import { writeFileSync, unlinkSync } from "fs";
 
-import getIdpData from "../constants/idp";
+import getIdpData from "../constants/idp.js";
 import { Readable } from "stream";
 
 const scriptPath = "node_modules/@inrupt/generate-oidc-token/dist/index.js";

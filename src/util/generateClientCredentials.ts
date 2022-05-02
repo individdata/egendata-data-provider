@@ -75,5 +75,5 @@ export async function subscribeInbox(accessToken: string, dpopKey: KeyPair) {
       },
     }
   );
-//   console.log({response});
+  return response;
 }
