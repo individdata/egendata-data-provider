@@ -9,6 +9,7 @@ import { port, keyPath, podProviderBaseUrl } from "./constants/index.js";
 
 import { loadKey } from "./util/vc.js";
 
+console.log('Loading key from:', keyPath);
 const sourceUrl = `${podProviderBaseUrl}/arbetsformedlingen/`;
 const key = await loadKey(keyPath, { id: `${sourceUrl}key`, controller: `${sourceUrl}controller` });
 const webHookController = new WebhookController(key);
