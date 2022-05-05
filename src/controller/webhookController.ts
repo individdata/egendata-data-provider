@@ -186,9 +186,13 @@ export class WebhookController {
     
     console.log("saveVCResponseData:", saveVCToDataLocationResponse.data);
 
-    const { data: saveLinkResponseData } = await saveLinkToInbox(accessToken, dpopKey, outboundDataRequest.notificationInbox, outboundDataRequest.dataLocation);
+    try {
+      const { data: saveLinkResponseData } = await saveLinkToInbox(accessToken, dpopKey, outboundDataRequest.notificationInbox, outboundDataRequest.dataLocation);
 
-    console.log("saveLinkResponseData:", saveLinkResponseData);
+      console.log("saveLinkResponseData:", saveLinkResponseData);
+    } catch (err) {
+      console.log("Failed to save link to inbox, error:", err);
+    }
 
     console.log("Successfully handled webhook");
     response.status(200).send("OK");
