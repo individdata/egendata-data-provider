@@ -83,12 +83,12 @@ const parseConsentResourceData = (data: string) => {
   return { id, documentType, dataSubjectIdentifier, dataLocation, notificationInbox };
 };
 
-const saveVCToDataLocation = async (accessToken: string, dpopKey: KeyPair, dataLocation: string, doc: any) => {
+const saveVCToDataLocation = async (accessToken: string, dpopKey: KeyPair, requestId: string, dataLocation: string, doc: any) => {
   const document = Buffer.from(JSON.stringify(doc), "utf-8").toString("base64");
   const vcData = `
 @prefix egendata: <https://oak-pod-provider-oak-develop.test.services.jtech.se/schema/core/v1#> .
 <> a egendata:InboundDataResponse ;
-  egendata:id "${uuid().toString()}" ;
+  egendata:id "${requestId}" ;
   egendata:providerWebId "${webid}" ;
   egendata:document "${document}" .
   `;
@@ -179,7 +179,7 @@ export class WebhookController {
 
     // Put VC into user pod (dataLocation)
 
-    const {data: saveVCResponseData } = await saveVCToDataLocation(accessToken, dpopKey, outboundDataRequest.dataLocation, doc);
+    const {data: saveVCResponseData } = await saveVCToDataLocation(accessToken, dpopKey, outboundDataRequest.id, outboundDataRequest.dataLocation, doc);
 
     console.log("saveVCResponseData:", saveVCResponseData);
 
