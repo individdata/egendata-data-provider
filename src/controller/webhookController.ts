@@ -88,7 +88,7 @@ const saveVCToDataLocation = async (accessToken: string, dpopKey: KeyPair, reque
   const vcData = `
 @prefix egendata: <https://oak-pod-provider-oak-develop.test.services.jtech.se/schema/core/v1#> .
 <> a egendata:InboundDataResponse ;
-  egendata:id "${requestId}" ;
+  egendata:requestId "${requestId}" ;
   egendata:providerWebId "${webid}" ;
   egendata:document "${document}" .
   `;
@@ -179,9 +179,11 @@ export class WebhookController {
 
     // Put VC into user pod (dataLocation)
 
-    const {data: saveVCResponseData } = await saveVCToDataLocation(accessToken, dpopKey, outboundDataRequest.id, outboundDataRequest.dataLocation, doc);
+    const saveVCToDataLocationResponse = await saveVCToDataLocation(accessToken, dpopKey, outboundDataRequest.id, outboundDataRequest.dataLocation, doc);
 
-    console.log("saveVCResponseData:", saveVCResponseData);
+    console.log('saveVCToDataLocationResponse:', saveVCToDataLocationResponse);
+    
+    console.log("saveVCResponseData:", saveVCToDataLocationResponse.data);
 
     const { data: saveLinkResponseData } = await saveLinkToInbox(accessToken, dpopKey, outboundDataRequest.notificationInbox, outboundDataRequest.dataLocation);
 
