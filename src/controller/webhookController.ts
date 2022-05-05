@@ -181,7 +181,7 @@ export class WebhookController {
 
     const saveVCToDataLocationResponse = await saveVCToDataLocation(accessToken, dpopKey, outboundDataRequest.id, outboundDataRequest.dataLocation, doc);
 
-    console.log('saveVCToDataLocationResponse:', saveVCToDataLocationResponse);
+    console.log("saveVCToDataLocationResponse:", saveVCToDataLocationResponse);
     
     console.log("saveVCResponseData:", saveVCToDataLocationResponse.data);
 
