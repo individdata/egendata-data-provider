@@ -110,7 +110,7 @@ const saveLinkToInbox = async (accessToken: string, dpopKey: KeyPair, notificati
 <> <egendata:InboundDataResponse> <${dataLocation}>.
   `;
 
-  const url = `${notificationInbox}/response-link-${uuid().toString()}`;
+  const url = `${notificationInbox}response-link-${uuid().toString()}`;
   const response = await axios.put(url, linkData, {
     headers: {
       "Content-Type": "text/turtle",
