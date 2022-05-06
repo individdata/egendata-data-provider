@@ -1,40 +1,34 @@
 // import fetch from "node-fetch";
 // import { fetch } from "@inrupt/solid-client-authn-node";
-import axios from "axios";
+import axios from 'axios';
 import {
   createDpopHeader,
   generateDpopKeyPair,
-  buildAuthenticatedFetch,
   KeyPair,
-} from "@inrupt/solid-client-authn-core";
+} from '@inrupt/solid-client-authn-core';
 
-import * as constants from "../constants/index.js";
-
-interface ICredential {
-  id: string;
-  secret: string;
-}
+import * as constants from '../constants/index';
 
 export default async function generateClientCredentials() {
   const dpopKey = await generateDpopKeyPair();
-  const clientId = "arbetsformedlingen";
-  const clientSecret = "2Ghr8gca88LW9zf2";
+  const clientId = 'arbetsformedlingen';
+  const clientSecret = '2Ghr8gca88LW9zf2';
 
   const authString = `${encodeURIComponent(clientId)}:${encodeURIComponent(
-    clientSecret
+    clientSecret,
   )}`;
 
   const tokenUrl = `${constants.identityProviderBaseUrl}/.oidc/token`;
   const response = await axios.post(
     tokenUrl,
-    "grant_type=client_credentials&scope=webid",
+    'grant_type=client_credentials&scope=webid',
     {
       headers: {
-        authorization: `Basic ${Buffer.from(authString).toString("base64")}`,
-        "content-type": "application/x-www-form-urlencoded",
-        dpop: await createDpopHeader(tokenUrl, "POST", dpopKey),
+        authorization: `Basic ${Buffer.from(authString).toString('base64')}`,
+        'content-type': 'application/x-www-form-urlencoded',
+        dpop: await createDpopHeader(tokenUrl, 'POST', dpopKey),
       },
-    }
+    },
   );
   const { access_token: accessToken } = (await response.data) as {
     access_token: string;
@@ -44,15 +38,15 @@ export default async function generateClientCredentials() {
 
 export async function setupPod(accessToken: string, dpopKey: KeyPair) {
   const urls = [
-      `${constants.podProviderBaseUrl}/arbetsformedlingen/oak/inbox/`,
+    `${constants.podProviderBaseUrl}/arbetsformedlingen/oak/inbox/`,
   ];
   const promises = urls.map(async (url) =>
-    axios.put(url, "", {
+    axios.put(url, '', {
       headers: {
         Authorization: `DPoP ${accessToken}`,
-        dpop: await createDpopHeader(url, "GET", dpopKey),
+        dpop: await createDpopHeader(url, 'GET', dpopKey),
       },
-    })
+    }),
   );
   return Promise.all(promises);
 }
@@ -60,8 +54,8 @@ export async function setupPod(accessToken: string, dpopKey: KeyPair) {
 export async function subscribeInbox(accessToken: string, dpopKey: KeyPair) {
   const subcriptionUrl = `${constants.podProviderBaseUrl}/subscription`;
   const data = {
-    "@context": ["https://www.w3.org/ns/solid/notification/v1"],
-    type: "WebHookSubscription2021",
+    '@context': ['https://www.w3.org/ns/solid/notification/v1'],
+    type: 'WebHookSubscription2021',
     topic: `${constants.podProviderBaseUrl}/arbetsformedlingen/oak/inbox/`,
     target: `${constants.baseUrl}/webhook`,
   };
@@ -71,9 +65,9 @@ export async function subscribeInbox(accessToken: string, dpopKey: KeyPair) {
     {
       headers: {
         Authorization: `DPoP ${accessToken}`,
-        dpop: await createDpopHeader(subcriptionUrl, "POST", dpopKey),
+        dpop: await createDpopHeader(subcriptionUrl, 'POST', dpopKey),
       },
-    }
+    },
   );
   return response;
 }
