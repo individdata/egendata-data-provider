@@ -147,6 +147,8 @@ export class WebhookController {
 
     const { accessToken, dpopKey } = await generateClientCredentials();
 
+    console.log('Obtained new access token:', accessToken);
+
     const { data: notificationData } = await axios.get(resourceUri, {
       headers: {
         Authorization: `DPoP ${accessToken}`,
