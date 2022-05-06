@@ -157,9 +157,6 @@ export class WebhookController {
     });
 
     console.log("Fetched data from notification:", notificationData);
-    // Mock data
-    // const mockData = `@prefix egendata: <https://oak-pod-provider-oak-develop.test.services.jtech.se/schema/core/v1#> .
-    // <> <egendata:OutboundDataRequest> <http://localhost:3000/198907225331/oak/consents/request-539816f0-6b27-4e91-9322-030f34e661ba>.`;
 
     const linkData = parseLinkResourceData(notificationData);
     
@@ -171,25 +168,24 @@ export class WebhookController {
     });
 
     const outboundDataRequest = parseConsentResourceData(outboundDataRequestData);
-
     console.log("Extracted outboundDataRequest:", outboundDataRequest);
 
     // Create a Verifiable credential
     const doc = await createVc(this.key);
-    console.log("doc:", doc);
-
-    // Put VC into user pod (dataLocation)
-
-    const saveVCToDataLocationResponse = await saveVCToDataLocation(accessToken, dpopKey, outboundDataRequest.id, outboundDataRequest.dataLocation, doc);
-
-    console.log("saveVCToDataLocationResponse:", saveVCToDataLocationResponse);
-    
-    console.log("saveVCResponseData:", saveVCToDataLocationResponse.data);
+    console.log("Created Verifiable Credential:", doc);
 
     try {
-      const { data: saveLinkResponseData } = await saveLinkToInbox(accessToken, dpopKey, outboundDataRequest.notificationInbox, outboundDataRequest.dataLocation);
+      const saveVCToDataLocationResponse = await saveVCToDataLocation(accessToken, dpopKey, outboundDataRequest.id, outboundDataRequest.dataLocation, doc);
+      const { status, data } = saveVCToDataLocationResponse;
+      console.log(`saveVCToDataLocationResponse[status: ${status}]:`, data);
+    } catch (err) {
+      console.log("Failed to save vc to data location, error:", err);
+    }
 
-      console.log("saveLinkResponseData:", saveLinkResponseData);
+    try {
+      const saveLinkResponse = await saveLinkToInbox(accessToken, dpopKey, outboundDataRequest.notificationInbox, outboundDataRequest.dataLocation);
+      const { status, data } = saveLinkResponse;
+      console.log(`saveLinkResponse[status: ${status}]:`, data);
     } catch (err) {
       console.log("Failed to save link to inbox, error:", err);
     }
