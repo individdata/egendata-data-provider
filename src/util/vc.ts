@@ -20,6 +20,7 @@ export interface ICredentialSubject {
 export interface ICredential {
   '@context': any[],
   type: string,
+  issuer: string,
   issuanceDate: string,
   credentialSubject: ICredentialSubject,
 }
@@ -88,6 +89,7 @@ export const issueVerifiableCredential = async (key: any) => {
       },
     ],
     type: 'VerifiableCredential',
+    issuer: key.controller,
     issuanceDate: new Date().toISOString(),
     credentialSubject: {
       type: 'UnemploymentStatus',
