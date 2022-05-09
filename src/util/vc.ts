@@ -68,6 +68,7 @@ export const controllerDoc = (key: any) => {
 export const issueVerifiableCredential = async (key: any) => {
   const credential: ICredential = {
     '@context': [
+      'https://www.w3.org/2018/credentials/v1',
       {
         id: '@id',
         type: '@type',
