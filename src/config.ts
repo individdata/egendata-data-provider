@@ -8,3 +8,5 @@ export const baseUrl = process.env.BASE_URL;
 export const port = process.env.PORT || 3002;
 export const webid = process.env.WEBID || 'http://localhost:3001/arbetsformedlingen/profile/card#me';
 export const keyPath = process.env.KEY_PATH || 'source-key.pem';
+export const clientId = process.env.CLIENT_ID || 'arbetsformedlingen';
+export const clientSecret = process.env.CLIENT_SECRET || '2Ghr8gca88LW9zf2';
