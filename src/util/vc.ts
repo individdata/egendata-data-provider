@@ -87,7 +87,7 @@ export const issueVerifiableCredential = async (key: any) => {
         schema: 'http://schema.org/',
       },
     ],
-    type: 'UnemploymentStatus',
+    type: 'VerifiableCredential',
     issuanceDate: new Date().toISOString(),
     credentialSubject: {
       type: 'UnemploymentStatus',
