@@ -1,7 +1,7 @@
 import { createPrivateKey, KeyObject } from 'crypto';
 import * as fs from 'fs';
 import bs58 from 'bs58';
-import { createCredential, issue } from '@digitalbazaar/vc';
+import { issue } from '@digitalbazaar/vc';
 import { Ed25519VerificationKey2018 } from '@digitalbazaar/ed25519-verification-key-2018';
 // import { Ed25519Signature2018 } from '@digitalbazaar/ed25519-signature-2018';
 
@@ -66,8 +66,8 @@ export const controllerDoc = (key: any) => {
 };
 
 export const issueVerifiableCredential = (key: any) => {
-  const credential = createCredential(
-    [
+  const credential: ICredential = {
+    '@context': [
       {
         id: '@id',
         type: '@type',
@@ -86,7 +86,9 @@ export const issueVerifiableCredential = (key: any) => {
         schema: 'http://schema.org/',
       },
     ],
-    {
+    type: 'UnemploymentStatus',
+    issuanceDate: new Date().toISOString(),
+    credentialSubject: {
       type: 'UnemploymentStatus',
       status: 'unemployed',
       subject: '12341212-1212',
@@ -97,7 +99,7 @@ export const issueVerifiableCredential = (key: any) => {
         name: 'Arbetsförmedlingen',
       },
     },
-  );
+  };
 
   return issue(key, credential);
 };
