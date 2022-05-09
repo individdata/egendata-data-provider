@@ -61,7 +61,7 @@ export class WebhookController {
     console.log('Extracted outboundDataRequest:', outboundDataRequest);
 
     // Create a Verifiable credential
-    const doc = vc.issueVerifiableCredential(this.key);
+    const doc = await vc.issueVerifiableCredential(this.key);
     console.log('Created Verifiable Credential:', doc);
 
     try {

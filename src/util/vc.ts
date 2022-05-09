@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import bs58 from 'bs58';
 import { issue } from '@digitalbazaar/vc';
 import { Ed25519VerificationKey2018 } from '@digitalbazaar/ed25519-verification-key-2018';
-// import { Ed25519Signature2018 } from '@digitalbazaar/ed25519-signature-2018';
+import { Ed25519Signature2018 } from '@digitalbazaar/ed25519-signature-2018';
 
 export interface ICredentialSubject {
   type: string,
@@ -65,7 +65,7 @@ export const controllerDoc = (key: any) => {
   };
 };
 
-export const issueVerifiableCredential = (key: any) => {
+export const issueVerifiableCredential = async (key: any) => {
   const credential: ICredential = {
     '@context': [
       {
@@ -100,6 +100,5 @@ export const issueVerifiableCredential = (key: any) => {
       },
     },
   };
-
-  return issue(key, credential);
+  return issue({ credential, suite: new Ed25519Signature2018({ key }) });
 };
