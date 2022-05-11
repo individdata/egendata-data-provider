@@ -5,28 +5,30 @@ import { v4 as uuid } from 'uuid';
 import { webid } from '../config';
 import { baseUrl, identityProviderBaseUrl, podProviderBaseUrl } from '../config';
 
+const egendataPrefix = 'https://oak-pod-provider-oak-develop.test.services.jtech.se/schema/core/v1#';
+
 export const parseLinkResourceData = (data: string) => {
   const N3Parser = new N3.Parser();
   const store = new N3.Store(N3Parser.parse(data));
-  const outboundDataRequest = store.getObjects('', 'egendata:OutboundDataRequest', '')[0].value;
+  const outboundDataRequest = store.getObjects('', `${egendataPrefix}OutboundDataRequest`, '')[0].value;
   return { outboundDataRequest };
 };
 
 export const parseConsentResourceData = (data: string) => {
   const N3Parser = new N3.Parser();
   const store = new N3.Store(N3Parser.parse(data));
-  const id = store.getObjects('', 'egendata:id', '')[0].value;
-  const documentType = store.getObjects('', 'egendata:documentType', '')[0].value;
-  const dataSubjectIdentifier = store.getObjects('', 'egendata:dataSubjectIdentifier', '')[0].value;
-  const dataLocation = store.getObjects('', 'egendata:dataLocation', '')[0].value;
-  const notificationInbox = store.getObjects('', 'egendata:notificationInbox', '')[0].value;
+  const id = store.getObjects('', `${egendataPrefix}id`, '')[0].value;
+  const documentType = store.getObjects('', `${egendataPrefix}documentType`, '')[0].value;
+  const dataSubjectIdentifier = store.getObjects('', `${egendataPrefix}dataSubjectIdentifier`, '')[0].value;
+  const dataLocation = store.getObjects('', `${egendataPrefix}dataLocation`, '')[0].value;
+  const notificationInbox = store.getObjects('', `${egendataPrefix}notificationInbox`, '')[0].value;
   return { id, documentType, dataSubjectIdentifier, dataLocation, notificationInbox };
 };
 
 export const saveVCToDataLocation = async (accessToken: string, dpopKey: KeyPair, requestId: string, dataLocation: string, doc: any) => {
   const document = Buffer.from(JSON.stringify(doc), 'utf-8').toString('base64');
   const vcData = `
-@prefix egendata: <https://oak-pod-provider-oak-develop.test.services.jtech.se/schema/core/v1#> .
+@prefix egendata: <${egendataPrefix}> .
 <> a egendata:InboundDataResponse ;
   egendata:requestId "${requestId}" ;
   egendata:providerWebId "${webid}" ;
@@ -46,7 +48,7 @@ export const saveVCToDataLocation = async (accessToken: string, dpopKey: KeyPair
 
 export const saveLinkToInbox = async (accessToken: string, dpopKey: KeyPair, notificationInbox: string, dataLocation: string) => {
   const linkData = `
-@prefix egendata: <https://oak-pod-provider-oak-develop.test.services.jtech.se/schema/core/v1#> .
+@prefix egendata: <${egendataPrefix}> .
 <> egendata:InboundDataResponse <${dataLocation}>.
   `;
 
