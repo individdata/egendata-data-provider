@@ -47,7 +47,7 @@ export const saveVCToDataLocation = async (accessToken: string, dpopKey: KeyPair
 export const saveLinkToInbox = async (accessToken: string, dpopKey: KeyPair, notificationInbox: string, dataLocation: string) => {
   const linkData = `
 @prefix egendata: <https://oak-pod-provider-oak-develop.test.services.jtech.se/schema/core/v1#> .
-<> <egendata:InboundDataResponse> <${dataLocation}>.
+<> egendata:InboundDataResponse <${dataLocation}>.
   `;
 
   const url = `${notificationInbox}response-link-${uuid().toString()}`;
