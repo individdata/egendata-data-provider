@@ -23,7 +23,7 @@ export class WebhookController {
     const { object, type } = payload;
     const { id: resourceUri } = object;
     
-    await new Promise((resolve) => setTimeout(() => resolve(true), 500));
+    await new Promise((resolve) => setTimeout(() => resolve(true), 1500));
 
     try {
       if (type[0] !== 'Create') {
