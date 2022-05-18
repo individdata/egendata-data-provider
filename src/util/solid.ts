@@ -86,7 +86,7 @@ export const fetchAccessTokenAndDpopKey = async (clientId: string, clientSecret:
 
 export const setupPod = async (accessToken: string, dpopKey: KeyPair) => {
   const urls = [
-    `${podProviderBaseUrl}/arbetsformedlingen/oak/inbox/`,
+    `${podProviderBaseUrl}/arbetsformedlingen/egendata/inbox/`,
   ];
   const promises = urls.map(async (url) =>
     axios.put(url, '', {
@@ -104,7 +104,7 @@ export const subscribeToInbox = async (accessToken: string, dpopKey: KeyPair) =>
   const data = {
     '@context': ['https://www.w3.org/ns/solid/notification/v1'],
     type: 'WebHookSubscription2021',
-    topic: `${podProviderBaseUrl}/arbetsformedlingen/oak/inbox/`,
+    topic: `${podProviderBaseUrl}/arbetsformedlingen/egendata/inbox/`,
     target: `${baseUrl}/webhook`,
   };
   return axios.post(
