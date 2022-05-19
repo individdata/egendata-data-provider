@@ -92,7 +92,7 @@ export const setupPod = async (accessToken: string, dpopKey: KeyPair) => {
     axios.put(url, '', {
       headers: {
         Authorization: `DPoP ${accessToken}`,
-        dpop: await createDpopHeader(url, 'GET', dpopKey),
+        dpop: await createDpopHeader(url, 'PUT', dpopKey),
       },
     }),
   );
