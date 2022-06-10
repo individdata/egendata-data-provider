@@ -1,7 +1,7 @@
 
-# Data Provider App
+# Egendata Data Provider
 # TypeScript Node Express
-A data provider app with Typescript and Express
+A data provider with Typescript and Express
 
 ## To Build and run you need to have:
 1. Node.js >= 14.0

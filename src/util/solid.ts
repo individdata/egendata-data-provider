@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { webid } from '../config';
 import { baseUrl, identityProviderBaseUrl, podProviderBaseUrl } from '../config';
 
-const egendataPrefix = 'https://oak-pod-provider-oak-develop.test.services.jtech.se/schema/core/v1#';
+const egendataPrefix = 'https://pod-test.egendata.se/schema/core/v1#';
 
 export const parseLinkResourceData = (data: string) => {
   const N3Parser = new N3.Parser();

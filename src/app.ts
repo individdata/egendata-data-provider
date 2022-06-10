@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.get('/', (req: any, res: any) =>
-  res.send('Welcome to AF Data Provider App'),
+  res.send('Welcome to Egendata Data Provider'),
 );
 
 (async () => {
