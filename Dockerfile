@@ -9,7 +9,7 @@ RUN npm run build
 FROM node:16-alpine AS server
 WORKDIR /app
 COPY package* ./
-COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 RUN npm install --production
 COPY --from=builder ./app/dist ./
 EXPOSE 3002
