@@ -127,6 +127,7 @@ export const setupPod = async (accessToken: string, dpopKey: KeyPair) => {
       headers: {
         Authorization: `DPoP ${accessToken}`,
         dpop: await createDpopHeader(inboxAclUrl, 'PUT', dpopKey),
+        'Content-type': 'text/turtle',
       },
     },
   );
