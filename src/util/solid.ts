@@ -85,8 +85,9 @@ export const fetchAccessTokenAndDpopKey = async (clientId: string, clientSecret:
 };
 
 export const setupPod = async (accessToken: string, dpopKey: KeyPair) => {
+  const inboxUrl = `${podProviderBaseUrl}/arbetsformedlingen/egendata/inbox/`;
   const urls = [
-    `${podProviderBaseUrl}/arbetsformedlingen/egendata/inbox/`,
+    inboxUrl,
   ];
   const promises = urls.map(async (url) =>
     axios.put(url, '', {
@@ -96,7 +97,39 @@ export const setupPod = async (accessToken: string, dpopKey: KeyPair) => {
       },
     }),
   );
-  return Promise.all(promises);
+  await Promise.all(promises);
+
+  const inboxAclUrl = `${inboxUrl}.acl`;
+  await axios.put(
+    inboxAclUrl,
+    `
+      # ACL resource for the egendata inbox
+      @prefix acl: <http://www.w3.org/ns/auth/acl#>.
+      @prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+      # The inbox can be written to by the public, but not read.
+      <#public>
+          a acl:Authorization;
+          acl:agentClass foaf:Agent;
+          acl:accessTo <${inboxUrl}>;
+          acl:default <${inboxUrl}>;
+          acl:mode acl:Write, acl:Append.
+
+      # The owner has full access to the inbox
+      <#owner>
+          a acl:Authorization;
+          acl:agent <${webid}>;
+          acl:accessTo <${inboxUrl}>;
+          acl:default <${inboxUrl}>;
+          acl:mode acl:Read, acl:Write, acl:Control.
+    `,
+    {
+      headers: {
+        Authorization: `DPoP ${accessToken}`,
+        dpop: await createDpopHeader(inboxAclUrl, 'PUT', dpopKey),
+      },
+    },
+  );
 };
 
 export const subscribeToInbox = async (accessToken: string, dpopKey: KeyPair) => {
