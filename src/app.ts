@@ -8,7 +8,7 @@ import { loadKey } from './util/vc';
 
 const app: Application = express();
 app.set('port', port);
-app.use(express.json());
+app.use(express.json({ type: ['application/json', 'application/ld+json'] }));
 app.use(express.urlencoded());
 app.use(compression());
 
@@ -31,10 +31,18 @@ app.get('/', (req: any, res: any) =>
   const { accessToken, dpopKey } = await fetchAccessTokenAndDpopKey(clientId, clientSecret);
   console.log('accessToken:', accessToken);
   console.log('dpopKey:', dpopKey);
-  const setupPodResult = await setupPod(accessToken, dpopKey);
-  console.log('setupPodResult:', setupPodResult);
-  const subscriptionResponse = await subscribeToInbox(accessToken, dpopKey);
-  console.log('Subscription response:', subscriptionResponse);
+  try {
+    try {
+      const setupPodResult = await setupPod(accessToken, dpopKey);
+      console.log('setupPodResult:', setupPodResult);
+    } catch (err) {
+      console.info('Pod setup error:', err);
+    }
+    const subscriptionResponse = await subscribeToInbox(accessToken, dpopKey);
+    console.log('Subscription response:', subscriptionResponse);
+  } catch (err) {
+    console.log('Subscription error:', err);
+  }
 })();
 
 export default app;
