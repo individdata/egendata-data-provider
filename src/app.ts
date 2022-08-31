@@ -36,7 +36,7 @@ app.get('/', (req: any, res: any) =>
       const setupPodResult = await setupPod(accessToken, dpopKey);
       console.log('setupPodResult:', setupPodResult);
     } catch (err) {
-      console.info('Pod setup error:', err);
+      console.log('Pod setup error:', err);
     }
     const subscriptionResponse = await subscribeToInbox(accessToken, dpopKey);
     console.log('Subscription response:', subscriptionResponse);
