@@ -22,8 +22,6 @@ export class WebhookController {
     console.log('Received webhook body:', payload);
     const { object, type } = payload;
     const { id: resourceUri } = object;
-    
-    await new Promise((resolve) => setTimeout(() => resolve(true), 1500));
 
     try {
       if (type[0] !== 'Create' && type[0] !== 'https://www.w3.org/ns/activitystreams#Create') {
