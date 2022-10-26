@@ -2,7 +2,7 @@ import N3 from 'n3';
 import axios from 'axios';
 import { createDpopHeader, KeyPair, generateDpopKeyPair } from '@inrupt/solid-client-authn-core';
 import { v4 as uuid } from 'uuid';
-import { webid } from '../config';
+import { webid, podName } from '../config';
 import { baseUrl, identityProviderBaseUrl, podProviderBaseUrl } from '../config';
 
 const egendataPrefix = 'https://pod-test.egendata.se/schema/core/v1#';
@@ -85,7 +85,7 @@ export const fetchAccessTokenAndDpopKey = async (clientId: string, clientSecret:
 };
 
 export const setupPod = async (accessToken: string, dpopKey: KeyPair) => {
-  const inboxUrl = `${podProviderBaseUrl}/arbetsformedlingen/egendata/inbox/`;
+  const inboxUrl = `${podProviderBaseUrl}/${podName}/egendata/inbox/`;
   const urls = [
     inboxUrl,
   ];
@@ -138,7 +138,7 @@ export const subscribeToInbox = async (accessToken: string, dpopKey: KeyPair) =>
   const data = {
     '@context': ['https://www.w3.org/ns/solid/notification/v1'],
     type: 'WebHookSubscription2021',
-    topic: `${podProviderBaseUrl}/arbetsformedlingen/egendata/inbox/`,
+    topic: `${podProviderBaseUrl}/${podName}/egendata/inbox/`,
     target: `${baseUrl}/webhook`,
   };
   return axios.post(

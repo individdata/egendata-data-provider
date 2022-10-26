@@ -3,7 +3,7 @@ import express, { Application } from 'express';
 import compression from 'compression';
 import { setupPod, subscribeToInbox, fetchAccessTokenAndDpopKey } from './util/solid';
 import { WebhookController } from './controller/webhookController';
-import { port, keyPath, podProviderBaseUrl, clientId, clientSecret } from './config';
+import { port, keyPath, podProviderBaseUrl, podName, clientId, clientSecret } from './config';
 import { loadKey } from './util/vc';
 
 const app: Application = express();
@@ -22,7 +22,7 @@ app.get('/', (req: any, res: any) =>
 
 (async () => {
   console.log('Loading key from:', keyPath);
-  const sourceUrl = `${podProviderBaseUrl}/arbetsformedlingen/`;
+  const sourceUrl = `${podProviderBaseUrl}/${podName}/`;
   const key = await loadKey(keyPath, { id: `${sourceUrl}key`, controller: `${sourceUrl}controller` });
   const webHookController = new WebhookController(key);
 
