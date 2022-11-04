@@ -1,3 +1,4 @@
+import https from 'https';
 import axios, { AxiosResponse } from 'axios';
 import { Guid } from 'guid-typescript';
 import { aisBaseUrl, aisClientId, aisClientSecret, aisEnvironment, aisSystemId } from '../../config';
@@ -25,6 +26,9 @@ export interface InskrivningStatus {
 }
 
 export async function fetchInskrivningStatus(personummer: string): Promise<InskrivningStatus> {
+  const agent = new https.Agent({  
+    rejectUnauthorized: false,
+  });
   const config = {
     headers: {
       'AF-TrackingId': Guid.create().toString(),
@@ -35,6 +39,7 @@ export async function fetchInskrivningStatus(personummer: string): Promise<Inskr
       client_id: aisClientId,
       client_secret: aisClientSecret,
     },
+    agent,
   };
   const url = `${aisBaseUrl}/${personummer}/status-inskrivning`;
   try {

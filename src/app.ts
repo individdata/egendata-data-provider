@@ -1,10 +1,10 @@
 import errorHandler from 'errorhandler';
 import express, { Application } from 'express';
 import compression from 'compression';
-// import { setupPod, subscribeToInbox, fetchAccessTokenAndDpopKey } from './util/solid';
-// import { WebhookController } from './controller/webhookController';
-// import { port, keyPath, podProviderBaseUrl, clientId, clientSecret } from './config';
-// import { loadKey } from './util/vc';
+import { setupPod, subscribeToInbox, fetchAccessTokenAndDpopKey } from './util/solid';
+import { WebhookController } from './controller/webhookController';
+import { keyPath, podProviderBaseUrl, clientId, clientSecret } from './config';
+import { loadKey } from './util/vc';
 
 const app: Application = express();
 app.set('port', 3003);
@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === 'development') {
 app.get('/', (req: any, res: any) =>
   res.send('Welcome to Egendata Data Provider'),
 );
-/* 
+
 (async () => {
   console.log('Loading key from:', keyPath);
   const sourceUrl = `${podProviderBaseUrl}/arbetsformedlingen/`;
@@ -44,5 +44,5 @@ app.get('/', (req: any, res: any) =>
     console.log('Subscription error:', err);
   }
 })();
- */
+
 export default app;
