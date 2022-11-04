@@ -66,7 +66,7 @@ export const controllerDoc = (key: any) => {
   };
 };
 
-export const issueVerifiableCredential = async (key: any) => {
+export const issueVerifiableCredential = async (key: any, credentialSubject: any) => {
   const credential: ICredential = {
     '@context': [
       'https://www.w3.org/2018/credentials/v1',
@@ -91,17 +91,7 @@ export const issueVerifiableCredential = async (key: any) => {
     type: 'VerifiableCredential',
     issuer: key.controller,
     issuanceDate: new Date().toISOString(),
-    credentialSubject: {
-      type: 'UnemploymentStatus',
-      status: 'unemployed',
-      subject: '12341212-1212',
-      statusChangedDate: '2021-09-17',
-      issuer: {
-        type: 'GovernmentOrganization',
-        identifier: '202100-2114',
-        name: 'Arbetsförmedlingen',
-      },
-    },
+    credentialSubject,
   };
   return issue({ credential, suite: new Ed25519Signature2018({ key }) });
 };

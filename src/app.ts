@@ -3,11 +3,11 @@ import express, { Application } from 'express';
 import compression from 'compression';
 import { setupPod, subscribeToInbox, fetchAccessTokenAndDpopKey } from './util/solid';
 import { WebhookController } from './controller/webhookController';
-import { port, keyPath, podProviderBaseUrl, podName, clientId, clientSecret } from './config';
+import { keyPath, podProviderBaseUrl, podName, clientId, clientSecret } from './config';
 import { loadKey } from './util/vc';
 
 const app: Application = express();
-app.set('port', port);
+app.set('port', 3003);
 app.use(express.json({ type: ['application/json', 'application/ld+json'] }));
 app.use(express.urlencoded());
 app.use(compression());
