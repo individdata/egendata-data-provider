@@ -23,6 +23,9 @@ export class WebhookController {
     const { object, type } = payload;
     const { id: resourceUri } = object;
 
+    
+    await new Promise((resolve) => setTimeout(() => resolve(true), 1500));
+
     try {
       if (type[0] !== 'Create' && type[0] !== 'https://www.w3.org/ns/activitystreams#Create') {
         console.log('Ignoring webhook message, because it\'s not of type \'https://www.w3.org/ns/activitystreams#Create\'...');
