@@ -9,7 +9,7 @@ import {
   saveVCToDataLocation,
   saveLinkToInbox,
 } from '../util/solid';
-
+import { fetchInskrivningStatus } from '../service/ais/inskrivning';
 export class WebhookController {
   private readonly key: any;
 
@@ -60,8 +60,23 @@ export class WebhookController {
     const outboundDataRequest = parseConsentResourceData(outboundDataRequestData);
     console.log('Extracted outboundDataRequest:', outboundDataRequest);
 
+    const inskrivningStatus = await fetchInskrivningStatus(outboundDataRequest.dataSubjectIdentifier);
+    console.log('Fetched inskrivningStatus:', inskrivningStatus);
+
+    const credentialSubject = {
+      type: 'UnemploymentStatus',
+      status: inskrivningStatus.ar_inskriven,
+      subject: inskrivningStatus.personnummer,
+      statusChangedDate: '2021-09-17',
+      issuer: {
+        type: 'GovernmentOrganization',
+        identifier: '202100-2114',
+        name: 'Arbetsförmedlingen',
+      },
+    };
+
     // Create a Verifiable credential
-    const doc = await vc.issueVerifiableCredential(this.key);
+    const doc = await vc.issueVerifiableCredential(this.key, credentialSubject);
     console.log('Created Verifiable Credential:', doc);
 
     try {

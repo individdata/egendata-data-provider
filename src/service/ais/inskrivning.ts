@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { Guid } from 'guid-typescript';
-import { aisBaseUrl, aisClientId, aisClientSecret, aisEnvironment } from '../../config';
+import { aisBaseUrl, aisClientId, aisClientSecret, aisEnvironment, aisSystemId } from '../../config';
 
 
 enum AISEnvironment {
@@ -11,24 +11,24 @@ enum AISEnvironment {
   PROD = 'PROD',
 }
 
-interface InskrivningResponse {
-  'ar_inskriven': Boolean,
-  'inskrivningsdatum': String,
-  'kontorskod': String,
-  'visas_enbart_for_ansvarig_handl': Boolean,
-  'ar_avaktualiserad': Boolean,
-  'ar_lagrad': Boolean,
-  'personnummer': String,
-  'ar_inskriven_via_webb': Boolean,
-  'tillatet_personnummer': Boolean,
-  'pagande_personnummerbyte': Boolean
+export interface InskrivningStatus {
+  'ar_inskriven': boolean,
+  'inskrivningsdatum': string,
+  'kontorskod': string,
+  'visas_enbart_for_ansvarig_handl': boolean,
+  'ar_avaktualiserad': boolean,
+  'ar_lagrad': boolean,
+  'personnummer': string,
+  'ar_inskriven_via_webb': boolean,
+  'tillatet_personnummer': boolean,
+  'pagande_personnummerbyte': boolean
 }
 
-export default async (personummer: String): Promise<InskrivningResponse | String> => {
+export async function fetchInskrivningStatus(personummer: string): Promise<InskrivningStatus> {
   const config = {
     headers: {
       'AF-TrackingId': Guid.create().toString(),
-      'AF-SystemId': 'egen-data-provider',
+      'AF-SystemId': aisSystemId,
       'AF-Environment': AISEnvironment[aisEnvironment as AISEnvironment],
     },
     params: {
@@ -43,10 +43,13 @@ export default async (personummer: String): Promise<InskrivningResponse | String
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log('error message: ', error.message);
-      return error.message;
     } else {
       console.log('unexpected error: ', error);
-      return 'An unexpected error occurred';
     }
+    throw error;
   }
-};
+}
+
+const delay = (retryCount: number) => new Promise(resolve => setTimeout(resolve, 2 ** retryCount));
+export const fetchInskrivningStatusWithRetry = (personnummer: string, retryCount = 0): Promise<InskrivningStatus> => fetchInskrivningStatus(personnummer).catch(() => delay(retryCount).then(() => fetchInskrivningStatusWithRetry(personnummer, retryCount + 1)));
+
