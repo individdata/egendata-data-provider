@@ -49,6 +49,8 @@ export class WebhookController {
     console.log('Fetched data from notification:', notificationData);
 
     const linkData = parseLinkResourceData(notificationData);
+
+    console.log('Parsed link resource data:', linkData);
     
     const { data: outboundDataRequestData } = await axios.get(linkData.outboundDataRequest, {
       headers: {

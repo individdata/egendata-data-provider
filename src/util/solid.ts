@@ -8,9 +8,20 @@ import { baseUrl, identityProviderBaseUrl, podProviderBaseUrl } from '../config'
 const egendataPrefix = 'https://pod-test.egendata.se/schema/core/v1#';
 
 export const parseLinkResourceData = (data: string) => {
+  console.log('Parsing from data:', data);
   const N3Parser = new N3.Parser();
   const store = new N3.Store(N3Parser.parse(data));
-  const outboundDataRequest = store.getObjects('', `${egendataPrefix}OutboundDataRequest`, '')[0].value;
+  const findPredicate = `${egendataPrefix}OutboundDataRequest`;
+  console.log('Searching for predicate:', findPredicate);
+  const foundObjects = store.getObjects('', findPredicate, '');
+
+  if (foundObjects.length < 1) {
+    throw new Error(`Did not find predicate "${findPredicate}" in data`);
+  }
+
+  console.log('Found objects:', foundObjects);
+  const firstObject = foundObjects[0];
+  const outboundDataRequest = firstObject.value;
   return { outboundDataRequest };
 };
 
