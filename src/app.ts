@@ -26,7 +26,14 @@ app.get('/', (req: any, res: any) =>
   const key = await loadKey(keyPath, { id: `${sourceUrl}key`, controller: `${sourceUrl}controller` });
   const webHookController = new WebhookController(key);
 
-  app.post('/webhook', (req, res) => webHookController.handle(req, res));
+  app.post('/webhook', (req, res) => {
+    try {
+      webHookController.handle(req, res);
+    } catch (err) {
+      console.log('Failed to handle webhook request, error:', err);
+      res.status(500).end();
+    }
+  });
 
   const { accessToken, dpopKey } = await fetchAccessTokenAndDpopKey(clientId, clientSecret);
   console.log('accessToken:', accessToken);
