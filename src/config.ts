@@ -2,6 +2,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+if (!process.env.AIS_CLIENT_SECRET) throw new Error('AIS_CLIENT_SECRET must be defined');
+if (!process.env.AIS_CLIENT_ID) throw new Error('AIS_CLIENT_ID must be defined');
+
 export const identityProviderBaseUrl = process.env.IDENTITY_PROVIDER_BASE_URL || 'https://idp-test.egendata.se';
 export const podProviderBaseUrl = process.env.POD_PROVIDER_BASE_URL || 'https://pod-test.egendata.se';
 export const baseUrl = process.env.BASE_URL || 'http://localhost:3002';
