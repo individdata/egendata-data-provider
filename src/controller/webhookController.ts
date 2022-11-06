@@ -62,7 +62,21 @@ export class WebhookController {
     const outboundDataRequest = parseConsentResourceData(outboundDataRequestData);
     console.log('Extracted outboundDataRequest:', outboundDataRequest);
 
-    const inskrivningStatus = await fetchInskrivningStatus(outboundDataRequest.dataSubjectIdentifier);
+    // TODO: A hard-coded mapping from webid to personal number for testing purpose...
+    // Personal number should instead be discovered/fetched via the WebID profile...
+    const mapWebID2Pno: Record<string, string> = {
+      'https://idp-test.jobtechdev.se/50664638-cbec-48da-9405-1ee8a7a30577/profile/card#me': '199010102383',
+    };
+
+    const { dataSubjectIdentifier } = outboundDataRequest;
+    const pno = mapWebID2Pno[dataSubjectIdentifier];
+
+    if (!pno) {
+      console.log('Did not find any mapping from WebID to personal number...');
+      throw new Error('Did not find any mapping from WebID to personal number...');
+    }
+
+    const inskrivningStatus = await fetchInskrivningStatus(pno);
     console.log('Fetched inskrivningStatus:', inskrivningStatus);
 
     const credentialSubject = {
