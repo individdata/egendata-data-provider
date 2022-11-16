@@ -9,7 +9,9 @@ import {
   saveVCToDataLocation,
   saveLinkToInbox,
 } from '../util/solid';
-import { fetchRegistrationStatusSubject, fetchQualificationStatusSubject } from '../service/ais/inskrivning';
+import { fetchRegistrationStatusSubject } from '../service/registrationStatus';
+import { fetchRelevanceStatusSubject } from '../service/relevanceStatus';
+import { fetchInskrivningStatus } from '../service/ais/inskrivning';
 export class WebhookController {
   private readonly key: any;
 
@@ -73,7 +75,7 @@ export class WebhookController {
     const personnummer = outboundDataRequest.dataSubjectIdentifier;
 
     const credentialSubject = (outboundDataRequest.documentType === 'http://egendata.se/schema/core/v1#JobSeekerRegistrationStatus') ?
-      await fetchRegistrationStatusSubject(personnummer) : await fetchQualificationStatusSubject(personnummer);
+      await fetchRegistrationStatusSubject(personnummer, fetchInskrivningStatus) : await fetchRelevanceStatusSubject(personnummer, fetchInskrivningStatus);
 
     console.log('credentialSubject:', credentialSubject);
 

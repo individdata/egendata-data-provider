@@ -136,3 +136,4 @@ dist
 *credentials.json
 .env
 source-key.pem
+key

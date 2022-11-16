@@ -4,26 +4,18 @@ import bs58 from 'bs58';
 import { issue } from '@digitalbazaar/vc';
 import { Ed25519VerificationKey2018 } from '@digitalbazaar/ed25519-verification-key-2018';
 import { Ed25519Signature2018 } from '@digitalbazaar/ed25519-signature-2018';
+import type { RegistrationStatusSubject } from '../service/registrationStatus';
+import type { RelevanceStatusSubject } from '../service/relevanceStatus';
 
-export interface ICredentialSubject {
-  type: string,
-  status: string,
-  subject: string,
-  statusChangedDate: string,
-  issuer: {
-    type: string,
-    identifier: string,
-    name: string,
-  }
-}
+export type CredentialSubject = RegistrationStatusSubject | RelevanceStatusSubject;
 
-export interface ICredential {
+export type CredentialBody = {
   '@context': any[],
   type: string,
   issuer: string,
   issuanceDate: string,
-  credentialSubject: ICredentialSubject,
-}
+  credentialSubject: CredentialSubject,
+};
 
 const cryptoKeyToEd25519VerificationKey2018 = (cryptoKey: KeyObject, options: any) => {
   // To convert the key, export it as a jwk, decode the base64, and reencode it with base58
@@ -66,16 +58,16 @@ export const controllerDoc = (key: any) => {
   };
 };
 
-export const issueVerifiableCredential = async (key: any, credentialSubject: any) => {
-  const credential: ICredential = {
+export const issueVerifiableCredential = async (key: any, credentialSubject: CredentialSubject) => {
+  const credentialType = credentialSubject.type;
+  const credential: CredentialBody = {
     '@context': [
       'https://www.w3.org/2018/credentials/v1',
       {
         id: '@id',
         type: '@type',
         subject: 'http://purl.org/dc/terms/subject',
-        JobSeekerRegistrationStatus: 'schema:DigitalDocument',
-        InternshipQualificationStatus: 'schema:DigitalDocument',
+        [credentialType]: 'schema:DigitalDocument',
         schema: 'http://schema.org/',
         af: 'http://arbetsformedlingen.se/schema/core/v1#',
         isRegistered: 'af:isRegistered',
